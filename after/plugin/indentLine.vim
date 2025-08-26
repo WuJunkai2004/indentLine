@@ -124,6 +124,39 @@ function! s:ResetConcealOption()
     endif
 endfunction
 
+"{{{1 function! s:DetectShiftwidth()
+function! s:DetectShiftwidth()
+    let num_lines = min([50, line('$')])
+    if num_lines == 0
+        return 4
+    endif
+    let space_counts = []
+    for i in range(1, num_lines)
+        let line_content = getline(i)
+        let leading_spaces = matchstr(line_content, '^\s*')
+        let space_count = strlen(leading_spaces)
+        if space_count > 0
+            call add(space_counts, space_count)
+        endif
+    endfor
+    if empty(space_counts)
+        return 4
+    endif
+    let divisors = [4, 2, 3, 5, 6]
+    for divisor in divisors
+        let divisible_count = 0
+        for count in space_counts
+            if count > 0 && count % divisor == 0
+                let divisible_count += 1
+            endif
+        endfor
+        if (divisible_count * 1.0 / len(space_counts)) > 0.8
+            return divisor
+        endif
+    endfor
+    return 4
+endfunction
+
 "{{{1 function! s:DisableOnDiff()
 function! s:DisableOnDiff()
     if &diff
@@ -318,6 +351,11 @@ endfunction
 
 "{{{1 function! s:Setup()
 function! s:Setup()
+    let detected_sw = s:DetectShiftwidth()
+    if detected_sw > 0
+        let &l:shiftwidth = detected_sw
+    endif
+
     if &filetype ==# ""
         call s:InitColor()
     endif
