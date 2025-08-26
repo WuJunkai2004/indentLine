@@ -145,8 +145,8 @@ function! s:DetectShiftwidth()
     let divisors = [4, 2, 3, 5, 6]
     for divisor in divisors
         let divisible_count = 0
-        for count in space_counts
-            if count > 0 && count % divisor == 0
+        for head in space_counts
+            if head > 0 && head % divisor == 0
                 let divisible_count += 1
             endif
         endfor
