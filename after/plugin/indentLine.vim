@@ -135,7 +135,7 @@ function! s:DetectShiftwidth()
         let line_content = getline(i)
         let leading_spaces = matchstr(line_content, '^\s*')
         let space_count = strlen(leading_spaces)
-        if space_count > 0
+        if space_count > 1
             call add(space_counts, space_count)
         endif
     endfor
