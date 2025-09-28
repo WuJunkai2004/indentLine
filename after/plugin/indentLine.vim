@@ -354,6 +354,7 @@ function! s:Setup()
     let detected_sw = s:DetectShiftwidth()
     if detected_sw > 0
         let &l:shiftwidth = detected_sw
+        let &l:tabstop = detected_sw
     endif
 
     if &filetype ==# ""
