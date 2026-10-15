@@ -91,6 +91,13 @@ let g:indentLine_setConceal = 0
 See the [VIM Reference Manual](http://vimdoc.sourceforge.net/htmldoc/version7.html#new-conceal) for more information on the `conceal` feature.
 
 
+**Automatic indent width detection**
+
+indentLine guesses the indent width of a buffer from the leading whitespace of its first lines, and applies it to both `shiftwidth` and `tabstop` so that the indent guides are aligned.
+
+The detection only runs when the buffer has not customized these options yet: if a modeline, an ftplugin or a `:setlocal` command has already set `shiftwidth` or `tabstop` for the buffer, indentLine leaves them untouched. The guess is also made at most once per buffer, so later manual changes are never overridden.
+
+
 **Disabling conceal for JSON and Markdown without disabling indentLine plugin**
 
 Even though this plugin requires conceal to be enabled for it to work, it is

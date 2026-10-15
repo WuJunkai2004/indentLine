@@ -157,6 +157,24 @@ function! s:DetectShiftwidth()
     return 4
 endfunction
 
+"{{{1 function! s:WidthCustomized()
+function! s:WidthCustomized()
+    return &l:shiftwidth != &g:shiftwidth || &l:tabstop != &g:tabstop
+endfunction
+
+"{{{1 function! s:DetectWidth()
+function! s:DetectWidth()
+    if exists("b:indentLine_width_detected") || s:WidthCustomized()
+        return
+    endif
+    let b:indentLine_width_detected = 1
+    let detected_sw = s:DetectShiftwidth()
+    if detected_sw > 0
+        let &l:shiftwidth = detected_sw
+        let &l:tabstop = detected_sw
+    endif
+endfunction
+
 "{{{1 function! s:DisableOnDiff()
 function! s:DisableOnDiff()
     if &diff
@@ -351,11 +369,7 @@ endfunction
 
 "{{{1 function! s:Setup()
 function! s:Setup()
-    let detected_sw = s:DetectShiftwidth()
-    if detected_sw > 0
-        let &l:shiftwidth = detected_sw
-        let &l:tabstop = detected_sw
-    endif
+    call s:DetectWidth()
 
     if &filetype ==# ""
         call s:InitColor()
